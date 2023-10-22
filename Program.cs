@@ -1,4 +1,5 @@
 global using rpg_training.Models;
+using rpg_training.DBContext;
 using rpg_training.Services.CharacterServices;
 
 namespace rpg_training
@@ -17,7 +18,9 @@ namespace rpg_training
             builder.Services.AddScoped<ICharacterServices, CharacterServices>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddDbContext<appDBcontext>(
+                options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                );
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

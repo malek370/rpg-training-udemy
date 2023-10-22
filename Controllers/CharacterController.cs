@@ -19,31 +19,31 @@ namespace rpg_training.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Get()
         {
-            return Ok(_characterSurvices.GetAllCharacters());
+            return Ok(await _characterSurvices.GetAllCharacters());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> GetSingle(int id)
         {
-            return Ok(_characterSurvices.GetCharacter(id));
+            return Ok(await _characterSurvices.GetCharacter(id));
         }
 
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<object>>> PostCharacter(AddCharacterDTO character) 
         {
-            return Ok(_characterSurvices.AddCharacter(character));
+            return Ok(await _characterSurvices.AddCharacter(character));
         }
 
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<object>>> UpdateCharacter(UpdateCharacterDTO character)
         {
-            return Ok(_characterSurvices.UpdateCharacter(character));
+            return Ok(await _characterSurvices.UpdateCharacter(character));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> DeleteCharacter(int id)
         {
-            return Ok(_characterSurvices.RemoveCharacter(id));
+            return Ok(await _characterSurvices.RemoveCharacter(id));
         }
     }
 
