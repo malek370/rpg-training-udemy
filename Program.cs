@@ -1,3 +1,5 @@
+global using rpg_training.Models;
+using rpg_training.Services.CharacterServices;
 
 namespace rpg_training
 {
@@ -11,6 +13,8 @@ namespace rpg_training
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+            builder.Services.AddScoped<ICharacterServices, CharacterServices>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
