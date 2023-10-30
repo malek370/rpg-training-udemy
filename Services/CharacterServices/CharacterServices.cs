@@ -18,6 +18,7 @@ namespace rpg_training.Services.CharacterServices
             _dbcontext=appDBcontext;
             _httpcontextaccessor=httpContextAccessor;
         }
+        
         private int getUserId()=>int.Parse(_httpcontextaccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public async Task<ServiceResponse<Object>> AddCharacter(AddCharacterDTO character)
@@ -57,7 +58,7 @@ namespace rpg_training.Services.CharacterServices
         {
             try
             {
-                var res = await _dbcontext.characters.FirstOrDefaultAsync(c => c.id == id);
+                var res = await _dbcontext.characters.FirstOrDefaultAsync(c => c.id == id && c.User!.Id==getUserId());
                 if (res == null) { return new ServiceResponse<GetCharacterDTO> { Message = "character Not found", Success = false }; }
                 return new ServiceResponse<GetCharacterDTO> { obj = _mapper.Map<GetCharacterDTO>(res) };
             }
@@ -72,7 +73,7 @@ namespace rpg_training.Services.CharacterServices
         {
             try
             {
-                var character = await _dbcontext.characters.FirstOrDefaultAsync(item => item.id == update_character.id);
+                var character = await _dbcontext.characters.FirstOrDefaultAsync(item => item.id == update_character.id && item.User!.Id == getUserId());
                 if (character == null)
                 {
                     return new ServiceResponse<object> { Message = "character not found", Success = false };
@@ -98,7 +99,7 @@ namespace rpg_training.Services.CharacterServices
             try
             {
 
-                var character = await _dbcontext.characters.FirstOrDefaultAsync(item => item.id == id);
+                var character = await _dbcontext.characters.FirstOrDefaultAsync(item => item.id == id && item.User!.Id == getUserId());
                 if (character == null)
                 {
                     return new ServiceResponse<GetCharacterDTO> { Message = "character not found", Success = false };
