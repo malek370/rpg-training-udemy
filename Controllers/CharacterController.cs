@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using rpg_training.DTOs.CharacterDTO;
 using rpg_training.Models;
 using rpg_training.Services.CharacterServices;
+using System.ComponentModel;
+using System.Security.Claims;
 
 namespace rpg_training.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[Controller]")]
     public class CharacterController : ControllerBase
@@ -19,6 +23,7 @@ namespace rpg_training.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Get()
         {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.NameIdentifier)!.Value);
             return Ok(await _characterSurvices.GetAllCharacters());
         }
 

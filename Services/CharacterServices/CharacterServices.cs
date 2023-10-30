@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using rpg_training.DBContext;
 using rpg_training.DTOs.CharacterDTO;
+using System.Security.Claims;
 
 namespace rpg_training.Services.CharacterServices
 {
@@ -9,17 +10,22 @@ namespace rpg_training.Services.CharacterServices
         
         private readonly IMapper _mapper;
         private readonly appDBcontext _dbcontext;
-        public CharacterServices(IMapper mapper, appDBcontext appDBcontext)
+        private readonly IHttpContextAccessor _httpcontextaccessor;
+
+        public CharacterServices(IMapper mapper, appDBcontext appDBcontext,IHttpContextAccessor httpContextAccessor)
         {
             _mapper=mapper;
             _dbcontext=appDBcontext;
+            _httpcontextaccessor=httpContextAccessor;
         }
+        private int getUserId()=>int.Parse(_httpcontextaccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public async Task<ServiceResponse<Object>> AddCharacter(AddCharacterDTO character)
         {
             try
             {
                 var res = _mapper.Map<Character>(character);
+                res.User=await _dbcontext.users.FirstOrDefaultAsync(u=>u.Id==getUserId());
                 await _dbcontext.AddAsync(res);
                 await _dbcontext.SaveChangesAsync();
                 return new ServiceResponse<object> { Message = "Character added" };
@@ -34,7 +40,7 @@ namespace rpg_training.Services.CharacterServices
         {
             try
             {
-                var characters = await _dbcontext.characters.ToListAsync();
+                var characters = await _dbcontext.characters.Where(c=>c.User!.Id==getUserId()).ToListAsync();
                 return new ServiceResponse<List<GetCharacterDTO>>
 
                 {

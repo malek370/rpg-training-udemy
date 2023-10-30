@@ -1,4 +1,9 @@
-﻿using rpg_training.DTOs.UserDTO;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using rpg_training.DTOs.UserDTO;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -7,18 +12,20 @@ namespace rpg_training.DBContext
     public class Authentification : IAuthentification
     {
         private appDBcontext _appDB;
-
-        public Authentification(appDBcontext appDBcontext) 
+        private IConfiguration _config;
+        public Authentification(appDBcontext appDBcontext,IConfiguration configuration) 
         {
             _appDB=appDBcontext;
+            _config=configuration;
         }
         public async Task<ServiceResponse<string>> Login(LoginUserDTO userlog)
         {
+            
             User? user = await _appDB.users.FirstOrDefaultAsync(u =>
                 u.Username!.Equals(userlog.Username));
             if (user == null || !VerifiePassword(userlog.Password,user.HashedPassword,user.SaltPassword))
             { return new ServiceResponse<string>() { Success=false,obj="-1",Message="wrong login informations"}; }
-            else { return new ServiceResponse<string>() {Message="user found",obj=user.Id.ToString() }; }
+            else { return new ServiceResponse<string>() {Message="user found",obj=CreateToken(user).ToString() }; }
         }
 
         public async Task<ServiceResponse<int>> Register(RegisterUserDTO user)
@@ -63,8 +70,27 @@ namespace rpg_training.DBContext
                 var computedhashedPassword = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedhashedPassword.SequenceEqual(hashedPassword);
             }
-            
         }
 
+
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username!),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            };  
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _config.GetSection("AppSettings:Token").Value!));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                                   claims: claims,
+                                   expires: DateTime.Now.AddDays(1),
+                                   signingCredentials: cred
+                                     );
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
+        }
     }
 }
