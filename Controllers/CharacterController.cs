@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using rpg_training.DTOs.CharacterDTO;
+using rpg_training.DTOs.SkillDTO;
 using rpg_training.Models;
 using rpg_training.Services.CharacterServices;
 using System.ComponentModel;
@@ -49,6 +50,12 @@ namespace rpg_training.Controllers
         public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> DeleteCharacter(int id)
         {
             return Ok(await _characterSurvices.RemoveCharacter(id));
+        }
+
+        [HttpPut("skillCharacter")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDTO>>> AddSkillCharacter(addSkillCharacterDTO addskill)
+        {
+            return Ok(await _characterSurvices.AddSkillToCharacter(addskill));
         }
     }
 

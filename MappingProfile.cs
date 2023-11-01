@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using rpg_training.DTOs.CharacterDTO;
+using rpg_training.DTOs.SkillDTO;
 using System.Reflection;
 
 namespace rpg_training
@@ -11,6 +12,8 @@ namespace rpg_training
         {
             CreateMap<Character, GetCharacterDTO>();
             CreateMap<AddCharacterDTO, Character>();
+            CreateMap<Weapon, GetWeaponDTO>();
+            CreateMap<Skill,GetSkillDTO>();
         }
 
     }

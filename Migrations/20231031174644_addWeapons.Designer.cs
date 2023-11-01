@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rpg_training.DBContext;
 
@@ -11,9 +12,11 @@ using rpg_training.DBContext;
 namespace rpg_training.Migrations
 {
     [DbContext(typeof(appDBcontext))]
-    partial class appDBcontextModelSnapshot : ModelSnapshot
+    [Migration("20231031174644_addWeapons")]
+    partial class addWeapons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace rpg_training.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CharacterSkill", b =>
-                {
-                    b.Property<int>("Charactersid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SkillsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Charactersid", "SkillsId");
-
-                    b.HasIndex("SkillsId");
-
-                    b.ToTable("CharacterSkill");
-                });
 
             modelBuilder.Entity("rpg_training.Models.Character", b =>
                 {
@@ -106,52 +94,6 @@ namespace rpg_training.Migrations
                         });
                 });
 
-            modelBuilder.Entity("rpg_training.Models.Skill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Damage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("skills");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Damage = 20,
-                            Name = "fire ball"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Damage = 200,
-                            Name = "8 gates"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Damage = 33,
-                            Name = "shadow clone"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Damage = 10,
-                            Name = "rasengan"
-                        });
-                });
-
             modelBuilder.Entity("rpg_training.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -199,21 +141,6 @@ namespace rpg_training.Migrations
                         .HasFilter("[CharacterId] IS NOT NULL");
 
                     b.ToTable("weapons");
-                });
-
-            modelBuilder.Entity("CharacterSkill", b =>
-                {
-                    b.HasOne("rpg_training.Models.Character", null)
-                        .WithMany()
-                        .HasForeignKey("Charactersid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("rpg_training.Models.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("SkillsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("rpg_training.Models.Character", b =>

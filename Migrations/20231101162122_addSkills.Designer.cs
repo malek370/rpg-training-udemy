@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rpg_training.DBContext;
 
@@ -11,9 +12,11 @@ using rpg_training.DBContext;
 namespace rpg_training.Migrations
 {
     [DbContext(typeof(appDBcontext))]
-    partial class appDBcontextModelSnapshot : ModelSnapshot
+    [Migration("20231101162122_addSkills")]
+    partial class addSkills
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,32 +127,6 @@ namespace rpg_training.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("skills");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Damage = 20,
-                            Name = "fire ball"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Damage = 200,
-                            Name = "8 gates"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Damage = 33,
-                            Name = "shadow clone"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Damage = 10,
-                            Name = "rasengan"
-                        });
                 });
 
             modelBuilder.Entity("rpg_training.Models.User", b =>
