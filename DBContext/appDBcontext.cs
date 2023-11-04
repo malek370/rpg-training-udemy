@@ -7,6 +7,7 @@ namespace rpg_training.DBContext
         public DbSet<User> users { set; get; }
         public DbSet<Weapon> weapons { set; get; }
         public DbSet<Skill> skills { set; get; }
+        public DbSet<FightRequest> fightRequests { set; get; }
         public appDBcontext(DbContextOptions<appDBcontext> options):base(options)
         {
             

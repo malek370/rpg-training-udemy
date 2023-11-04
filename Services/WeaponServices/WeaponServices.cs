@@ -24,6 +24,7 @@ namespace rpg_training.Services.WeaponServices
             {
                 var character=await _dBcontext.characters
                     .Include(c=>c.Weapon)
+                    .Include(c=>c.User)
                     .FirstOrDefaultAsync(c=>c.id==newWeapon.CharacterId && c.User.Id==getUserId);
                 if(character==null) { throw new Exception("user not found"); }
                 if (character.Weapon != null) { throw new Exception("character already has a weapon"); }

@@ -12,5 +12,7 @@
         public User? User { get; set; }
         public Weapon? Weapon { get; set; }
         public List<Skill>? Skills { get; set; }
+        public int wins { get; set; }   
+        public int loss { get; set; }
     }
 }

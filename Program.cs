@@ -4,7 +4,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using rpg_training.DBContext;
+using rpg_training.Services.AttackServices;
 using rpg_training.Services.CharacterServices;
+using rpg_training.Services.FightServices;
 using rpg_training.Services.WeaponServices;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
@@ -24,6 +26,8 @@ namespace rpg_training
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddScoped<ICharacterServices, CharacterServices>();
             builder.Services.AddScoped<IWeaponServices, WeaponServices>();
+            builder.Services.AddScoped<IAttackService, AttackService>();
+            builder.Services.AddScoped<IFightServices, FightService>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {

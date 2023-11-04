@@ -11,6 +11,8 @@ namespace rpg_training.DTOs.CharacterDTO
         public int Defense { get; set; } = 10;
         public int Intelligence { get; set; } = 10;
         public RPGClass Class { get; set; } = RPGClass.Knight;
+        public int wins { get; set; }
+        public int loss { get; set; }
         public GetWeaponDTO? Weapon { get; set; }
         public List<GetSkillDTO>? Skills { get; set; }
     }
